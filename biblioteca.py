@@ -1,7 +1,26 @@
 def carica_da_file(file_path):
     """Carica i libri dal file"""
-    # TODO
-
+    from csv import reader
+    with open("file_path", "r", encoding="utf-8") as f:
+        csvreader=reader(f)
+        if FileNotFoundError:
+            return None
+        libri=[]
+        righe=next(csvreader)  #CAPIRE
+        for line in csvreader:
+            titolo=line[0]
+            autore=line[1]
+            anno=line[2]
+            pagine=line[3]
+            sezione=line[4]
+            libro= {
+                "titolo": titolo,
+                "autore": autore,
+                "anno": anno,
+                "pagine": pagine,
+                "sezione": sezione }
+        libri.append(libro)
+        return libri
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
     """Aggiunge un libro nella biblioteca"""
