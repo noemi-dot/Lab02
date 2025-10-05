@@ -1,31 +1,47 @@
 def carica_da_file(file_path):
     """Carica i libri dal file"""
     from csv import reader
-    with open("file_path", "r", encoding="utf-8") as f:
-        csvreader=reader(f)
-        if FileNotFoundError:
-            return None
-        libri=[]
-        righe=next(csvreader)  #CAPIRE
-        for line in csvreader:
-            titolo=line[0]
-            autore=line[1]
-            anno=line[2]
-            pagine=line[3]
-            sezione=line[4]
-            libro= {
-                "titolo": titolo,
-                "autore": autore,
-                "anno": anno,
-                "pagine": pagine,
-                "sezione": sezione }
-        libri.append(libro)
-        return libri
+    try:
+        with open(file_path, "r", encoding="utf-8") as f:
+            csvreader=reader(f)
+            libri=[]
+            righe=next(csvreader)  #salta la prima riga
+            for line in csvreader:
+                titolo=line[0]
+                autore=line[1]
+                anno=line[2]
+                pagine=line[3]
+                sezione=line[4]
+                libro= {
+                    "titolo": titolo,
+                    "autore": autore,
+                    "anno": int(anno),
+                    "pagine": int(pagine),
+                    "sezione": int(sezione)
+                }
+                libri.append(libro)
+            return libri
+    except FileNotFoundError:
+        return None
 
 def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path):
     """Aggiunge un libro nella biblioteca"""
-    # TODO
+    nuovo_libro={
+        "titolo": titolo,
+        "autore": autore,
+        "anno": int(anno),
+        "pagine": int(pagine),
+        "sezione": int(sezione),
+    }
+    for i in biblioteca:
+        for libro in i:
+            if libro["titolo"] == titolo:
+                return None   #il libro esiste già
 
+    if sezione<1 or sezione>5:
+        return None  #la sezione non esiste
+
+    biblioteca.append(nuovo_libro)
 
 def cerca_libro(biblioteca, titolo):
     """Cerca un libro nella biblioteca dato il titolo"""
