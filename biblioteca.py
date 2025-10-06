@@ -5,7 +5,8 @@ def carica_da_file(file_path):
         with open(file_path, "r", encoding="utf-8") as f:
             csvreader=reader(f)
             libri=[]
-            righe=next(csvreader)  #salta la prima riga
+            num_sezione=int(f.readline().strip())  #salva la prima riga per conoscere il num di sezioni
+            biblioteca = [[] for _ in range(num_sezione)]
             for line in csvreader:
                 titolo=line[0]
                 autore=line[1]
@@ -19,8 +20,8 @@ def carica_da_file(file_path):
                     "pagine": int(pagine),
                     "sezione": int(sezione)
                 }
-                libri.append(libro)
-            return libri
+                biblioteca[int(sezione) - 1].append(libro)
+            return biblioteca
     except FileNotFoundError:
         return None
 
@@ -38,19 +39,30 @@ def aggiungi_libro(biblioteca, titolo, autore, anno, pagine, sezione, file_path)
             if libro["titolo"] == titolo:
                 return None   #il libro esiste già
 
-    if sezione<1 or sezione>5:
+    if sezione<1 or sezione>len(biblioteca):
         return None  #la sezione non esiste
 
-    biblioteca.append(nuovo_libro)
+    biblioteca[(sezione)-1].append(nuovo_libro)
+    with open(file_path, "a", encoding="utf-8") as f:  #"a" sta per "append"
+        f.write(f"{titolo},{autore},{anno},{pagine},{sezione}\n")
+        return nuovo_libro
 
 def cerca_libro(biblioteca, titolo):
     """Cerca un libro nella biblioteca dato il titolo"""
-    # TODO
-
+    for sezione in biblioteca:
+        for libro in sezione:
+            if libro["titolo"].upper()==titolo.upper():
+                print(f"{libro['titolo']}, {libro['autore']}, {libro['anno']}, {libro['pagine']}, {libro['sezione']}")
+    return None #il libro non esiste
 
 def elenco_libri_sezione_per_titolo(biblioteca, sezione):
     """Ordina i titoli di una data sezione della biblioteca in ordine alfabetico"""
-    # TODO
+    if sezione < 1 or sezione > len(biblioteca):
+        return None
+    libri_sezione=biblioteca[sezione-1]
+    titoli_ordinati = sorted([libro["titolo"] for libro in libri_sezione])
+
+    return titoli_ordinati
 
 
 def main():
