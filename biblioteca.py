@@ -64,7 +64,6 @@ def elenco_libri_sezione_per_titolo(biblioteca, sezione):
 
     return titoli_ordinati
 
-
 def main():
     biblioteca = []
     file_path = "biblioteca.csv"
